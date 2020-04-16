@@ -156,74 +156,28 @@ app.post('/delete-shoppinglist', (req, res, next) => {
 });
 
 
-app.use('/shoppinglist/:id', function (req, res, next) {
+app.use('/shoppinglist/:id', function(req, res, next) {
     console.log('shoppinglist id :', req.params.id)
     next();
 });
 
+//tähän itemien listaus.
 
 
-///shoppinglist/${shoppinglist._id}
 app.get('/shoppinglist/:id', (req, res, next) => {
     const shoppinglist_id = req.params.id;
-
 
     //https://medium.com/@nicknauert/mongooses-model-populate-b844ae6d1ee7
     shoppinglist_model.findOne({ _id: shoppinglist_id })
         .populate('items').exec((err, items) => {
-           console.log("Populated items " + items);
-           
-           //TypeError: items.forEach is not a function joten...
 
-          // for (const item of items.items) {console.log("testi" + item.name, item.url, item.quantity);     }
-            res.write(`
-            <html>
-            <body>
-            `);
-     
-         for (const item of items.items)
-         {
-           
-            res.write(`item name: ${item.name}, quantity: ${item.quantity}, <img src="${item.url}"
+            for (const item of items.items) { console.log("testi" + item.name, item.url, item.quantity); }
 
-            </body>
-            </html>
-
-            `);
-
-          //items.items.forEach( (item) =>  console.log(item.name) ); 
-        
-        
-        }
-       
-        res.end();
-
-
-          
-         
-        
-        
-        
-        
-        
-        
-            /*   console.log("Populated items " + items);
-            VIITTAUSONGELMA items.
-            
-            //todo
-            items.foreach.....
-*/
-        }); 
+        });
 
 
 
 
-    
-
-
-
-
-    //tähän itemien listaus.
     console.log('shoppinglist_id: ' + shoppinglist_id);
     //tähän itemien lisäys
     res.write(`
@@ -239,38 +193,17 @@ app.get('/shoppinglist/:id', (req, res, next) => {
 </html>
 </body>
         `);
-     res.end();
+    res.end();
 
 });
 
-app.use('/add-item', function (req, res, next) {
+app.use('/add-item', function(req, res, next) {
 
     console.log('testiiiii: ' + req.body.shoppinglist_id)
-    //const items = req.body.shoppinglist_id;
+        //const items = req.body.shoppinglist_id;
     console.log('items: ' + items)
     next();
 });
-
-
-
-/* app.post('/add-item'), (req, res, next) => {
-    const shoppinglist = req.body.shoppinglist;
-
-    let new_item = item_model({
-        name: req.body.item_name,
-        url: req.body.item_quantity,
-        quantity: req.body.item_quantity
-    });
- 
-    new_item.save().then(() => {
-        console.log('item saved');
-        shoppinglists.items.push(new_item);
-        shoppinglists.save().then(() => {
-
-            return res.redirect('/dfgdfgdfgback');
-        });
-    });
-} */
 
 
 app.post('/add-item', (req, res, next) => {
@@ -282,19 +215,7 @@ app.post('/add-item', (req, res, next) => {
     console.log('req.body.shoppinglist_id' + req.body.shoppinglist_id);
     const shoppinglist_id = req.body.shoppinglist_id;
 
-    //const item = items;
 
-    /*     let new_item = item_model({
-            name: req.body.item_name,
-            url: req.body.item_quantity,
-            quantity: req.body.item_quantity,
-            shoppinglist_id : req.body.shoppinglist_id
-         });
-         */
-
-
-    // const shoppinglist_id = req.params.id
-    //const shoppinglist = req.params;
     console.log("req.params " + req.params);
 
     shoppinglist_model.findOne({
@@ -314,51 +235,12 @@ app.post('/add-item', (req, res, next) => {
             shoppinglists.items.push(new_item);
             shoppinglists.save().then(() => {
                 console.log("item saved to shoppinglist array")
-                return res.redirect('back');       //     `/shoppinglist/${shoppinglist._id}`);
+                return res.redirect('back'); //     `/shoppinglist/${shoppinglist._id}`);
             });
         });
     });
 
-
-
 })
-
-
-
-
-
-/*
-new_shoppinglist.save().then(() => {
-    console.log('shoppinglist saved');
-    user.shoppinglists.push(new_shoppinglist);
-    user.save().then(() => {
-        return res.redirect('/');
-    });
-});
-*/
-
-
-/* paras tähän mennessä
-  
-    new_item.save().then(() => {
-        console.log('item saved');
-        shoppinglists.i.items.push(new_item);
-        console.log(items[items.length-1]);
-        console.log("items.parent" +items.parent())
-        //console.log('user.shoppinglists ' + user.shoppinglist);
-        items.parent().save().then(() => {
-            return res.redirect('/');
-        });
-    });
-});
-
-*/
-
-
-
-
-
-
 
 
 app.post('/add-shoppinglist', (req, res, next) => {
